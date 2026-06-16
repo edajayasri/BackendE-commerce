@@ -1,7 +1,8 @@
 let users=require('../models/usermodel')
 let bcrypt=require('bcrypt')
-let jwt=reuire('jsonwebtoken')
+let jwt=require('jsonwebtoken')
 let dotenv=require('dotenv').config()
+let mail = require('../utils/gmail.js')
 
 exports.register=async(req, res) => {
     try{
@@ -23,7 +24,7 @@ exports.register=async(req, res) => {
 
         //Generate a json web token
         let payload={username:username,emailaddress:email,role:role}
-        let token=await jwt.sign(payload,secretkey,{expiresIn:'1hr'})
+        let token=await jwt.sign(payload,process.env.SECRETKEY,{expiresIn:'1hr'})
        
 
         // To Send a mail to user
@@ -45,7 +46,7 @@ let ishashverified=await bcrypt.compare(password,checkuser.password)
 if(!ishashverified) return res.json({"msg":"username or password is wrong"}) 
 //verified 
 let token =req.headers.authorization.split(' ')[1]
-let isValid=await jwt.verify(token,secretkey)
+let isValid=await jwt.verify(token,process.env.SECRETKEY)
 if(!isValid) return res.json({"msg":"invalid token"})
     res.json({msg:"login Successful"})
 }catch(error){

@@ -1,8 +1,8 @@
 const mongoose=require('mongoose')
 let connection=async()=>{
     try{
-        await mongoose.connect('process.env.MANGODBURL')
-        CONSOLE.LOG('db connected')
+        await mongoose.connect(process.env.MONGODBURL)
+        console.log('db connected')
     
     }
     catch(error){
